@@ -1,0 +1,62 @@
+Common in 3 Sorted Arrays
+
+Given three sorted arrays in non-decreasing order, return all common elements in non-decreasing order across these arrays. If there are no such elements return an empty array.
+Note: Ignore duplicates, include each common element only once in the output.
+
+Examples :
+
+Input: a[] = [1, 5, 10, 20, 40, 80], b[] = [6, 7, 20, 80, 100], c[] = [3, 4, 15, 20, 30, 70, 80, 120]
+Output: [20, 80]
+Explanation: The elements 20 and 80 appear in all three arrays a, b, and c, making them the only common elements, so the output is [20, 80].
+
+Input: a[] = [1, 2, 3, 4, 5], b[] = [6, 7], c[] = [8, 9, 10]
+Output: []
+Explanation: Since none of the elements in arrays a, b, and c appear in all three arrays, there are no common elements, so the output is [].
+
+Input:  a[] = [1, 1, 1, 2, 2, 2], b[] = [1, 1, 2, 2, 2], c[] = [1, 1, 1, 1, 2, 2, 2, 2]
+Output: [1, 2]
+Explanation: Ignoring duplicates, 1 and 2 are present in all three arrays, so the output is [1, 2].
+
+Constraints:
+1 ≤ a.size(), b.size(), c.size() ≤ 10^5
+-105 ≤ a[i], b[i] , c[i] ≤ 10^5
+
+APPROACH: 
+basically here first i sotre all the elements of array in set so that it contain only unique elements as here previosuly i was thinking to store all elements in map and atlast return those elements having count==3 as
+it might come in all three arrays but here it is containing dublicates also in the same array that's why i am storing it in set and atlast doing the traversal of last stack and checking for particualr element whether
+it is present in the other both sets or not. 
+
+CODE: 
+class Solution {
+public:
+    vector<int> commonElements(vector<int> &a, vector<int> &b, vector<int> &c) {
+        // code here
+        vector<int> res;
+
+        int x = a.size();
+        int y = b.size();
+        int z = c.size();
+
+        set<int> st1;
+        set<int> st2;
+        set<int> st3;
+
+        for (int i = 0; i < x; i++)
+            st1.insert(a[i]);
+
+        for (int i = 0; i < y; i++)
+            st2.insert(b[i]);
+
+        for (int i = 0; i < z; i++)
+            st3.insert(c[i]);
+
+        for (auto x : st3) {
+            if ((st1.find(x) != st1.end()) && (st2.find(x) != st2.end())) {
+                res.push_back(x);
+            }
+        }
+
+        return res;
+    }
+};
+

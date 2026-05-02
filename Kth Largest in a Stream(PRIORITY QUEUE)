@@ -1,0 +1,103 @@
+Kth Largest in a Stream
+
+Given an input stream arr[] of n integers. Find the Kth largest element (not Kth largest unique element) after insertion of each element in the
+stream and if the Kth largest element doesn't exist, the answer will be -1 for that insertion. 
+
+Return a list of size n, where each element represents the Kth largest value after the corresponding insertion.
+
+Examples :
+
+Input: arr[] = [1, 2, 3, 4, 5, 6], k = 4
+Output: [-1, -1, -1, 1, 2, 3]
+Explanation: 
+After 1, the steam is [1]. The 4th largest does not exist. Output is -1.
+After 2, the stream is [1, 2]. The 4th largest does not exist. Output is -1.
+After 3, the stream is [1, 2, 3]. The 4th largest does not exist. Output is -1.
+After 4, the stream is [1, 2, 3, 4]. The 4th largest is 1.
+After 5, the stream is [1, 2, 3, 4, 5]. The 4th largest is 2.
+After 6, the stream is [1, 2, 3, 4, 5, 6]. The 4th largest is 3.
+
+Input: arr[] = [3, 2, 1, 3, 3], k = 2
+Output: [-1, 2, 2, 3, 3]
+Explanation: 
+After 3, the steam is [3]. Tthe 2nd largest does not exist. Output is -1.
+After 2, the stream is [3, 2]. The 2nd largest is 2.
+After 1, the stream is [3, 2, 1]. The 2nd largest is 2.
+After 3, the stream is [3, 2, 1, 3]. The 2nd largest is 3.
+After 3, the stream is [3, 2, 1, 3, 3]. The 2nd largest is 3.
+
+Constraints:
+1 ≤ k ≤ n ≤ 10^5
+1 ≤ arr[i] ≤ 10^5
+
+APPROACH : fr this problem i thought i will run a loop from i to n and inside that loop i will copy elements of given array in a temp array till 0 to i only
+           and then sort the temp array in descending order and return the kth element of the temp array if temp size is less then k then pushing -1 in the result
+           array. but this approach was taking n*nlogn time complexity so it gave TLE to me. 
+
+CODE : 
+      class Solution {
+public:
+    vector<int> kthLargest(vector<int>& arr, int k) {
+        // code here
+        int n = arr.size();
+
+        vector<int> res(n, -1);
+
+        for (int i = 0; i < n; i++)
+        {
+            vector<int> temp;
+
+            temp.assign(arr.begin(), arr.begin() + i + 1);
+
+            sort(temp.begin(), temp.end(), greater<int>());
+
+            if (i < k - 1)
+                continue;
+            else
+            {
+                res[i] = temp[k - 1];
+            }
+        }
+
+        return res;
+    }
+};
+
+APPROACH 2 : OPTIMAL APPROACH : using PRIORITY QUEUE(HEAP) so here basically using k size minheap we are getting the kth max number at the top as minheap. 
+
+CODE : #include <bits/stdc++.h>
+using namespace std;
+
+vector<int> kthLargest(int k, vector<int> &arr) {
+    priority_queue<int, vector<int>, greater<int>> pq; // min heap
+    vector<int> result;
+
+    for (int i = 0; i < arr.size(); i++) {
+        pq.push(arr[i]);
+
+        // keep only k elements in heap
+        if (pq.size() > k) {
+            pq.pop();
+        }
+
+        // if less than k elements
+        if (pq.size() < k) {
+            result.push_back(-1);
+        } else {
+            result.push_back(pq.top());
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> arr = {1, 2, 3, 4, 5, 6};
+    int k = 4;
+
+    vector<int> ans = kthLargest(k, arr);
+
+    for (int x : ans) {
+        cout << x << " ";
+    }
+} 

@@ -1,0 +1,104 @@
+Sort by Set Bit Count
+
+Given an array arr[] of integers, sort the array (in descending order) according to count of set bits in binary representation of array elements. 
+
+Note: For integers having same number of set bits in their binary representation, sort according to their position in the original array i.e., a stable sort.
+
+Examples:
+Input: arr[] = [5, 2, 3, 9, 4, 6, 7, 15, 32]
+Output: [15, 7, 5, 3, 9, 6, 2, 4, 32]
+Explanation: The integers in their binary representation are:
+15 - 1111
+7  - 0111
+5  - 0101
+3  - 0011
+9  - 1001
+6  - 0110
+2  - 0010
+4  - 0100
+32 - 10000
+hence the non-increasing sorted order is: [15], [7], [5, 3, 9, 6], [2, 4, 32]
+
+Input: arr[] = [1, 2, 3, 4, 5, 6]
+Output: [3, 5, 6, 1, 2, 4]
+Explanation: The integers in their binary representation are:
+3  - 0011
+5  - 0101
+6  - 0110
+1  - 0001
+2  - 0010
+4  - 0100
+hence the non-increasing sorted order is: [3, 5, 6], [1, 2, 4]
+Constraints:
+1 ≤ arr.size() ≤ 10^5
+1 ≤ arr[i] ≤ 10^6
+
+APPROACH :  there are basically 2 appraoches to find the count of set bit in a number, 
+          1. using in built function   __builtin_popcount(num)   ---->O(1) 
+          2. using while loop and doing 
+
+               int countSetBits(int n) {                ----->O(n)             
+                   int count = 0;
+                   while (n > 0) {
+                   if (n & 1) count++;
+                     n = n >> 1;
+                      }
+                       return count;
+                }
+
+              int countSetBits(int n) {       ----->O(count of set bits)
+                          int count = 0;
+
+                              while (n) {
+                                n = n & (n - 1);  // remove last set bit
+                                count++;
+                              }
+
+                            return count;
+                }
+
+
+the above ones are the approaches basically which we can use to find the count of set bits as here the constraints are so high so we have used the first one. 
+so here basically i am using vector of pair to temporary store the count, value as we need the ans to be in decreasing order by their count of 1's but we need 
+to return the original value of that element not count only that's why we are using pair of vector, 
+
+here basically we are sorting based on the first value so for that i wrote a comparator function and we are doing stable_sort as with the help of stable sort if 
+we are sorting then in that case if 2 no's are having same count then it will keep the elements in the order in which they are in original array simple sort 
+might distort the position if we are having same count for more than one element. 
+
+👉 Why stable_sort?
+Because:
+If two elements have same set bits
+Their original order must remain same
+
+CODE :
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    static bool cmp(pair<int, int> a, pair<int, int> b) {
+        return a.first > b.first;
+    }
+
+    vector<int> sortBySetBitCount(vector<int>& arr) {
+        vector<pair<int, int>> temp;
+
+        for (int i = 0; i < arr.size(); i++) {
+            int count = __builtin_popcount(arr[i]);
+            temp.push_back({count, arr[i]});
+        }
+
+        stable_sort(temp.begin(), temp.end(), cmp);
+
+        vector<int> res;
+        for (int i = 0; i < temp.size(); i++) {
+            res.push_back(temp[i].second);
+        }
+
+        return res;
+    }
+};
+             
+

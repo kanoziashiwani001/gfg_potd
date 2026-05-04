@@ -1,0 +1,53 @@
+Palindrome Binary
+
+Given an integer n, determine whether its binary representation forms a palindrome. Return true if the binary representation of n is a palindrome; 
+otherwise, return false.
+
+Note: A binary representation is considered a palindrome if it reads the same forward and backward.
+
+Examples:
+
+Input: n = 17
+Output: true
+Explanation: Binary representation of 17 is (10001)2, which reads the same forward and backward, so it is a palindrome. 
+
+Input: n = 16
+Output: false
+Explanation: Binary representation of 16 is (10000)2, which is not a palindrome. 
+
+Constraints:
+1 ≤ n ≤ 10^9
+
+APPROACH : simple simulation first find the binary representation of the given number and then checking that repsentation whether it is palindrome or not. 
+
+CODE:  
+
+class Solution {
+public:
+    bool isBinaryPalindrome(int n) {
+        string s = "";
+
+        while (n) {
+            int num = n % 2;
+
+            if (num == 1)
+                s = s + '1';
+            else if (num == 0)
+                s = s + '0';
+
+            n = n / 2;
+        }
+
+        int i = 0, j = s.size() - 1;
+
+        while (i <= j) {
+            if (s[i] != s[j])
+                return false;
+
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+};

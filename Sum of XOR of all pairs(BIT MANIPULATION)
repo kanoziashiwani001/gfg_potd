@@ -1,0 +1,83 @@
+Sum of XOR of all pairs
+
+https://www.geeksforgeeks.org/problems/sum-of-xor-of-all-pairs0723/1
+
+Difficulty: MediumAccuracy: 45.14%Submissions: 59K+Points: 4
+
+Given an integer array arr[] of size n, compute the sum of the bitwise XOR for all distinct pairs of elements. 
+That is, consider every pair of indices (i, j) such that 0 ≤ i < j < n, and calculate the total sum of (arr[i] XOR arr[j]) over all such pairs.
+
+Examples :
+
+Input : arr[] = [7, 3, 5]
+Output : 12
+Explanation: 
+All pairs (i, j) such that i < j and their XOR values are:
+7 ^ 3 = 4
+7 ^ 5 = 2
+3 ^ 5 = 6
+Sum of all XOR values = 4 + 2 + 6 = 12.
+
+Input : arr[] = [5, 9, 7, 6] 
+Output : 47
+Explanation:
+All pairs (i, j) such that i < j and their XOR values are:
+5 ^ 9 = 12
+5 ^ 7 = 2
+5 ^ 6 = 3
+9 ^ 7 = 14
+9 ^ 6 = 15
+7 ^ 6 = 1
+Sum of all XOR values = 12 + 2 + 3 + 14 + 15 + 1 = 47.
+
+Input : arr[] = [10] 
+Output : 0
+Explanation: Since there are no pairs, sum is 0.
+Constraints
+1 ≤ n ≤ 10^5
+1 ≤ arr[i] ≤ 10^5
+
+APPROACH 1: BRUTE FORCE APPROACH: using nested loop ans finding every possible pair and its xor values.
+
+APPROACH 2: OPTIMAL APPROACH: here using the bit manipulation concept xor give result as 1 only when it is 0,1 -->1, 1,0 -->1 ;
+                              so here basically we are counting set and unset bits and then finding the possible combinations that is just the product of 
+                              set and unset bit and atlast to get the sum we are multiplying the possible combinations to 2^power of i jonse bit position pe ho.
+
+CODE : 
+
+class Solution {
+public:
+    long long sumXOR(vector<int> &arr) {
+        // code here
+        long long ans = 0;
+
+        int n = arr.size();
+
+        // Brute force (commented)
+        /*
+        for(int i = 0; i < n; i++) {
+            int xo = 0;
+            for(int j = i + 1; j < n; j++) {
+                xo = arr[i] ^ arr[j];
+                ans += xo;
+            }
+        }
+        */
+
+        for(int i = 0; i < 32; i++) {
+            long long setbit = 0, unsetbit = 0;
+
+            for(int j = 0; j < n; j++) {
+                if((arr[j] & (1 << i)) != 0)   // check ith bit
+                    setbit++;
+                else
+                    unsetbit++;
+            }
+
+            long long possible_combinations = setbit * unsetbit;
+            ans += possible_combinations * (1LL << i);
+        }
+
+        return ans;
+    }
+};
